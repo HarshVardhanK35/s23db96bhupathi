@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to the #{title}
+
+  -
+    const image_names = [
+      'image1.jpg',
+      'image2.jpg',
+      'image3.jpg',
+      'image4.jpg',
+      'image5.jpg'
+    ];
+
+  -
+    const numImages = 3;
+    const selectedImages = [];
+
+    for (let i = 0; i < numImages; i++) {
+      const randomIndex = Math.floor(Math.random() * image_names.length);
+      const selectedImage = image_names[randomIndex];
+      selectedImages.push(selectedImage);
+    }
+
+  each image in selectedImages
+    img(src=`/public/images/${image}`, alt=`${image}`, height="300", width="300")

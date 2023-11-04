@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to the #{title} Page
+  br
+  br
+  -
+    let results = [
+        { productName: "Product 1", price: 10.99, description: "Description 1" },
+        { productName: "Product 2", price: 19.99, description: "Description 2" },
+        { productName: "Product 3", price: 25.49, description: "Description 3" }
+    ]
+  div.container-fluid
+    div.row
+      each item, index in results
+        div.col-sm-2(onclick = `buy(${index})`)
+          h4 Product: #{item.productName}
+          p Price: $#{item.price}
+          p Description: #{item.description}
+
+  script.
+      function buy(index) {
+        alert(`You purchased item ${index}.`);
+      }

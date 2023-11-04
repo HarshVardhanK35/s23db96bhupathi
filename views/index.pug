@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to the #{title}
+
+  button.btn.btn-secondary(onclick='faster()') Press Me
+  br
+  br
+  #faster
+    | Increase the speed
+  br
+  a(href="/product") View Products
+  script.
+    let mph = 20;
+    let change = 1;
+    function faster(){
+      mph = mph + change;
+      change = change + 1;
+      document.getElementById('faster').textContent = `MPH ${mph} with change ${change}`;
+    }
