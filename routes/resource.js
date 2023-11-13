@@ -3,26 +3,26 @@ var router = express.Router();
 
 // Require controller modules.
 var api_controller = require('../controllers/apiController');
-var costume_controller = require('../controllers/costumeController');
+var product_controller = require('../controllers/productController');
 
 /// API ROUTE ///
 // GET resources base.
 router.get('/', api_controller.api);
 
-/// COSTUME ROUTES ///
-// POST request for creating a Costume.
-router.post('/costumes', costume_controller.costume_create_post);
+/// product ROUTES ///
+// POST request for creating a product.
+router.post('/products', product_controller.product_create_post);
 
-// DELETE request to delete Costume.
-router.delete('/costumes/:id', costume_controller.costume_delete);
+// DELETE request to delete product.
+router.delete('/products/:id', product_controller.product_delete);
 
-// PUT request to update Costume.
-router.put('/costumes/:id', costume_controller.costume_update_put);
+// PUT request to update product.
+router.put('/products/:id', product_controller.product_update_put);
 
-// GET request for one Costume.
-router.get('/costumes/:id', costume_controller.costume_detail);
+// GET request for one product.
+router.get('/products/:id', product_controller.product_detail);
 
-// GET request for list of all Costume items.
-router.get('/costumes', costume_controller.costume_list);
+// GET request for list of all product items.
+router.get('/products', product_controller.product_list);
 
 module.exports = router;

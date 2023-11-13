@@ -4,19 +4,17 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const mongoose = require("mongoose");
-var resourceRouter = require('./routes/resource');
-var costumeRouter = require('./routes/costumes');
 
 require('dotenv').config();
 
 const connectionString = process.env.MONGO_CON
 
 mongoose.connect(connectionString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.log("Error Connecting to MongoDB: ", err));
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("Connected to MongoDB"))
+.catch((err) => console.log("Error Connecting to MongoDB: ", err));
 
 //Get the default connection
 var db = mongoose.connection;
@@ -24,31 +22,34 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once("open", function(){console.log("Connection to DB succeeded")})
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var productRouter = require("./routes/product");
+var Product = require("./models/product");
+
 var boardRouter = require("./routes/board");
 var chooseRouter = require("./routes/choose");
-var Costume = require("./models/costume");
+var indexRouter = require("./routes/index");
+var resourceRouter = require('./routes/resource');
+var productRouter = require("./routes/product");
+var productsRouter = require('./routes/products');
+var usersRouter = require("./routes/users");
 
 async function recreateDB(){
   // Delete everything
-  await Costume.deleteMany();
-  let instance1 = new Costume(
+  await Product.deleteMany();
+  let instance1 = new Product(
     {
-      costume_type: "Ghost Busters",
+      product_type: "Ghost Busters",
       size:'Large',
       cost:15.4
     });
-    let instance2 = new Costume(
+    let instance2 = new Product(
       {
-        costume_type: "Witch",
+        product_type: "Witch",
         size: 'Medium',
         cost: 17.4
       });
-      let instance3 = new Costume(
+      let instance3 = new Product(
         {
-          costume_type: "Vampire",
+          product_type: "Vampire",
           size: 'Extra Large',
           cost: 20.5
         });
@@ -87,7 +88,7 @@ app.use("/product", productRouter);
 app.use("/board", boardRouter);
 app.use("/choose", chooseRouter);
 app.use("/resource", resourceRouter);
-app.use('/costumes', costumeRouter);
+app.use('/products', productsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
