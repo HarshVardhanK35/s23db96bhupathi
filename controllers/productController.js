@@ -16,7 +16,6 @@ exports.product_list = async function (req, res) {
 exports.product_view_all_Page = async function (req, res) {
   try {
     theProducts = await Product.find();
-    // console.log(theProducts); // Add this line for debugging
     res.render("products", {
       title: "Product Search Results",
       results: theProducts,
@@ -43,13 +42,9 @@ exports.product_detail = async function (req, res) {
 exports.product_create_post = async function (req, res) {
   console.log(req.body);
   let document = new Product();
-  // We are looking for a body, since POST does not have query parameters.
-  // Even though bodies can be in many different formats, we will be picky
-  // and require that it be a json object
-  // {"product_type":"goat", "cost":12, "size":"large"}
-  document.product_type = req.body.product_type;
+  document.product_name = req.body.product_name;
   document.cost = req.body.cost;
-  document.size = req.body.size;
+  document.feature = req.body.feature;
   try {
     let result = await document.save();
     res.send(result);
@@ -79,9 +74,9 @@ ${JSON.stringify(req.body)}`);
   try {
     let toUpdate = await Product.findById(req.params.id);
     // Do updates of properties
-    if (req.body.product_type) toUpdate.product_type = req.body.product_type;
+    if (req.body.product_name) toUpdate.product_name = req.body.product_name;
     if (req.body.cost) toUpdate.cost = req.body.cost;
-    if (req.body.size) toUpdate.size = req.body.size;
+    if (req.body.feature) toUpdate.feature = req.body.feature;
     let result = await toUpdate.save();
     console.log("Success " + result);
     res.send(result);
@@ -98,6 +93,44 @@ exports.product_view_one_Page = async function (req, res) {
   try {
     result = await Product.findById(req.query.id);
     res.render("productdetail", { title: "Product Detail", toShow: result });
+  } catch (err) {
+    res.status(500);
+    res.send(`{'error': '${err}'}`);
+  }
+};
+
+// Handle building the view for creating a product.
+// No body, no in path parameter, no query.
+// Does not need to be async
+exports.product_create_Page = function (req, res) {
+  console.log("create view");
+  try {
+    res.render("productcreate", { title: "Product Create" });
+  } catch (err) {
+    res.status(500);
+    res.send(`{'error': '${err}'}`);
+  }
+};
+
+// Handle building the view for updating a product.
+// query provides the id
+exports.product_update_Page = async function (req, res) {
+  console.log("update view for item " + req.query.id);
+  try {
+    let result = await Product.findById(req.query.id);
+    res.render("productupdate", { title: "Product Update", toShow: result });
+  } catch (err) {
+    res.status(500);
+    res.send(`{'error': '${err}'}`);
+  }
+};
+
+// Handle a delete one view with id from query
+exports.product_delete_Page = async function (req, res) {
+  console.log("Delete view for id " + req.query.id);
+  try {
+    result = await Product.findById(req.query.id);
+    res.render("productdelete", { title: "Product Delete", toShow: result });
   } catch (err) {
     res.status(500);
     res.send(`{'error': '${err}'}`);

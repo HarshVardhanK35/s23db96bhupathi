@@ -1,0 +1,56 @@
+extends layout
+block content
+
+  h1.text-center= title
+
+  form(id='ProductForm', action="/resource/products", method="POST")
+    .card.mx-auto.mt-5
+      .card-body.text-center
+        div.row(class= 'mb-2')
+          div.col-3.text-right
+            label.productAttr(for='product_name') Product Name:
+            br
+            input#product_name(type='text', name='product_name', value="")
+          div.col-3.text-right
+            label.productAttr(for='feature') Product Feature:
+            br
+            input#feature(type='text', name='feature', value="")
+          div.col-3.text-right
+            label.productAttr(for='cost') Product cost:
+            br
+            input#cost(type='number', step= "any", name='cost', value="" )
+            br
+            br
+        div.text-center
+          input(type="submit" class="btn btn-primary" value="Submit")
+
+  script.
+    document.forms['ProductForm'].addEventListener('submit', (event) => {
+      event.preventDefault();
+      // TODO do something here to show user that form is being submitted
+      fetch(event.target.action, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+      }).then((response) => {
+        if(response.ok){
+            alert('Product Created Successfully!')
+            document.getElementById('ProductForm').reset()
+        }
+        else{
+            alert('Failed to create product. Please try again.');
+        }
+      }).then((body) => {
+        console.log(body);
+        // TODO handle body
+      }).catch((error) => {
+        console.log('Error:', error);
+        // TODO handle error
+        alert("Save failed " + error );
+      });
+    });
+
+  style.
+    .productAttr {
+      background-color: aquamarine;
+      width: 120px;
+    }

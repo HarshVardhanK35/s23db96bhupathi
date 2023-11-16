@@ -1,0 +1,60 @@
+extends layout
+
+block content
+  h1.text-center= title
+  if (toShow == null)
+    h2 No instance to delete
+  else
+    - let productid = toShow._id
+    - let product_name = toShow.product_name
+    - let productcost = toShow.cost
+    - let productfeature = toShow.feature
+    - let actionid = "/resource/products/" + productid
+    script let actionid = "#{actionid}"
+    .card.mx-auto.mt-5
+      .card-body.text-center
+        div.row
+          .col-3.text-right
+            div(class='productAttr') Product ID
+            div #{productid}
+          .col-3.text-right
+            div(class='productAttr mr-3') Product Name
+            div #{product_name}
+          .col-3.text-right
+            div(class='productAttr mr-3') Product Feature
+            div #{productfeature}
+          .col-3.text-right
+            div(class='productAttr mr-3') Product Cost
+            div #{productcost}
+        .row.mt-3
+          .col.text-center
+            button(class="btn btn-danger m-2" onclick="deleteOnid()") Delete
+            button(class="btn btn-secondary m-2" onclick="cancel()") Cancel
+  script.
+    function cancel() {
+      // Go back to the home page for the product collection
+      window.location.href='/products'
+    }
+  script.
+    function deleteOnid() {
+      console.log("starting delete")
+      // delete first
+      fetch(actionid, {
+        method: 'DELETE' // Don't need a body for the delete
+      }).then((resp) => {
+        return resp.json(); // or resp.text() or whatever the server sends
+      }).then((body) => {
+        alert("Delete succeded")
+        window.location.href='/products'
+        // TODO handle body
+      }).catch((error) => {
+        // TODO handle error
+        alert("Delete failed " + error )
+      });
+    }
+  style.
+    .productAttr {
+      background-color: aquamarine;
+      width: 120px;
+      margin: 0 auto;
+    }

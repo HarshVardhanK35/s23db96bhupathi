@@ -1,0 +1,54 @@
+extends layout
+block content
+  h1.text-center= title
+  - let productid = toShow._id
+  - let product_name = toShow.product_name
+  - let productcost = toShow.cost
+  - let productfeature = toShow.feature
+  - let actionid = "/resource/products/" + productid
+  form(id='productForm', action= actionid, method="PUT")
+    .card.mx-auto.mt-5
+      .card-body.text-center
+        div.row(class='mb-2')
+          div.col-3.text-right
+            label(class = 'productAttr', for='productid') Product ID
+            div #{productid}
+          div.col-3.text-right
+            label(class = 'productAttr', for='product_name') Product Name
+            br
+            input#product_name(type='text', name='product_name', value= product_name)
+          div.col-3.text-right
+            label(class = 'productAttr', for='feature') Product Feature
+            br
+            input#productfeature(type='text', name='feature', value= productfeature)
+          div.col-3.text-right
+            label(class = 'productAttr', for='productcost') Product Cost
+            br
+            input#productcost(type='number', name='productcost', value= productcost)
+            br
+            br
+          div.text-center
+            input(type="submit" class="btn btn-primary" value="Submit")
+      script.
+        document.forms['productForm'].addEventListener('submit', (event) => {
+          event.preventDefault();
+          // TODO do something here to show the user that the form is being submitted
+          fetch(event.target.action, {
+            method: 'PUT',
+            body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+          }).then((resp) => {
+            return resp.json(); // or resp.text() or whatever the server sends
+          }).then((body) => {
+            alert("Update succeeded");
+            // TODO handle body
+          }).catch((error) => {
+            // TODO handle error
+            alert("Update failed " + error );
+          });
+        });
+  style.
+    .productAttr {
+      background-color: aquamarine;
+      width: 120px;
+      margin: 0 auto;
+    }
