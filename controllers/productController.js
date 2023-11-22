@@ -43,8 +43,8 @@ exports.product_create_post = async function (req, res) {
   console.log(req.body);
   let document = new Product();
   document.product_name = req.body.product_name;
-  document.cost = req.body.cost;
   document.feature = req.body.feature;
+  document.cost = req.body.cost;
   try {
     let result = await document.save();
     res.send(result);

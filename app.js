@@ -8,7 +8,7 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var Product = require("./models/product");
 
-require("dotenv").config();
+var Account = require("./models/account");
 
 passport.use(
   new LocalStrategy(function (username, password, done) {
@@ -30,6 +30,12 @@ passport.use(
       });
   })
 );
+
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
+
+require("dotenv").config();
 
 const connectionString = process.env.MONGO_CON;
 
@@ -85,7 +91,6 @@ async function recreateDB() {
     .catch((err) => {
       console.error(err);
     });
-
   instance2
     .save()
     .then((doc) => {
@@ -94,7 +99,6 @@ async function recreateDB() {
     .catch((err) => {
       console.error(err);
     });
-
   instance3
     .save()
     .then((doc) => {
@@ -153,7 +157,7 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get("env") === "development" ? err : {};
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.render("error", { err: err });
 });
 
 module.exports = app;

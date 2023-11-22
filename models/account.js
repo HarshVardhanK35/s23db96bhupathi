@@ -1,14 +1,6 @@
-// passport config
-// Use the existing connection
-// The Account model
-var Account =require('./models/account');
-passport.use(new LocalStrategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
-
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const passportLocalMongoose = require("passport-localmongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 const accountSchema = new Schema({
  username: String,
  password: String

@@ -27,7 +27,7 @@ block content
   script.
     document.forms['ProductForm'].addEventListener('submit', (event) => {
       event.preventDefault();
-      // TODO do something here to show user that form is being submitted
+
       fetch(event.target.action, {
         method: 'POST',
         body: new URLSearchParams(new FormData(event.target)) // event.target is the form
@@ -41,10 +41,10 @@ block content
         }
       }).then((body) => {
         console.log(body);
-        // TODO handle body
+
       }).catch((error) => {
         console.log('Error:', error);
-        // TODO handle error
+        
         alert("Save failed " + error );
       });
     });

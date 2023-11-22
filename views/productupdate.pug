@@ -1,11 +1,13 @@
 extends layout
 block content
+
   h1.text-center= title
   - let productid = toShow._id
   - let product_name = toShow.product_name
   - let productcost = toShow.cost
   - let productfeature = toShow.feature
   - let actionid = "/resource/products/" + productid
+
   form(id='productForm', action= actionid, method="PUT")
     .card.mx-auto.mt-5
       .card-body.text-center
@@ -24,7 +26,7 @@ block content
           div.col-3.text-right
             label(class = 'productAttr', for='productcost') Product Cost
             br
-            input#productcost(type='number', name='productcost', value= productcost)
+            input#productcost(type='number', step = 'any', name='productcost', value= productcost)
             br
             br
           div.text-center
@@ -32,17 +34,22 @@ block content
       script.
         document.forms['productForm'].addEventListener('submit', (event) => {
           event.preventDefault();
-          // TODO do something here to show the user that the form is being submitted
+
           fetch(event.target.action, {
             method: 'PUT',
-            body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+            body: new URLSearchParams(new FormData(event.target))
           }).then((resp) => {
-            return resp.json(); // or resp.text() or whatever the server sends
+            if(resp.ok){
+              alert('Product Updated Successfully!')
+            }
+            else{
+              alert('Failed to update product. Please try again.');
+            }
           }).then((body) => {
             alert("Update succeeded");
-            // TODO handle body
+
           }).catch((error) => {
-            // TODO handle error
+
             alert("Update failed " + error );
           });
         });
